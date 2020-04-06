@@ -1,0 +1,266 @@
+<html>
+    <head>
+        <title>2048</title>
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>  
+  <!--    <link rel="stylesheet" href="style.css"> -->  
+    </head>
+    <body >
+       <div class=gamebox style="text-align:center; ">
+            <h1> 2048 GAME</h1>
+            <p><strong>Play 2048 Online</strong><br>Join the numbers and get to the <strong>2048 tile!</strong> </p>
+           <div class=row >
+               <div id=c00></div>
+               <div id=c01><span></span></div>
+               <div id=c02></div>
+               <div id=c03></div>
+               <br>
+           </div>
+           <div class=row >
+            <div id=c10></div>
+            <div id=c11></div>
+            <div id=c12></div>
+            <div id=c13></div>
+            <br>
+        </div>
+        <div class=row >
+            <div id=c20><span></span></div>
+            <div id=c21></div>
+            <div id=c22></div>
+            <div id=c23></div>
+            <br>
+        </div>
+        <div class=row ></div>
+            <div id=c30></div>
+            <div id=c31></div>
+            <div id=c32></div>
+            <div id=c33></div>
+            <br>
+        </div>
+       </div>
+        <script>
+            for(let i =0;i<4;i++)
+            {
+                for(let j=0;j<4;j++)
+                {
+                    let pos=0;
+                    $("#c"+i+''+j).css(
+                        {
+                            'text-align':'center',
+                            'background':'#EEF',
+                            'color':'dimgrey',
+                            'width': '50px',
+                            'font-size': '25px',
+                            'height': '25px',
+                            'padding': '25px',
+                            'margin': '5px',
+                            'display':'inline-block',
+                            'border-radius':'5px',
+						//  	'box-sizing':'border-box'
+                        }
+                    ).text("0");
+                }
+                
+            }
+            style = new Array();
+			style[0] 	= {background:'#EEF',color:'dimgrey'};
+			style[2] 	= {background:'#CCF',color:'black'};
+			style[4] 	= {background:'#AAF',color:'black'};
+			style[8] 	= {background:'#99F',color:'black'};
+			style[16] 	= {background:'#88F',color:'black'};
+			style[32] 	= {background:'#77F',color:'black'};
+			style[64] 	= {background:'#66F',color:'black'};
+			style[128] = {background:'#55F',color:'black'};
+			style[256] = {background:'#44F',color:'black'};
+			style[512] = {background:'#33F',color:'black'};
+			style[1024]= {background:'#22F',color:'black'};
+		    style[2048]= {background:'#11F',color:'black'};
+			style[4096]= {background:'#00F',color:'black'};
+            let randomNum = [2,2,2,4];
+            let grid = new Array();
+            for(let i=0;i<4;i++)
+                grid[i]= new Array();
+
+            for(let i=0;i<4;i++)
+            {
+                for(let j=0;j<4;j++)
+                    grid[i][j]=0;
+            }
+
+            function randomcell()
+            {
+                let Newnum = randomNum[Math.floor(Math.random() * randomNum.length)]; 
+                let Newi,Newj;
+                do
+                {
+                    Newi= Math.floor(Math.random() * 3);
+                     Newj= Math.floor(Math.random() * 3);
+                }while(grid[Newi][Newj]!=0);
+                grid[Newi][Newj]=Newnum;
+                $('#c'+Newi+''+Newj).text(Newnum).css(style[grid[Newi][Newj]]);
+                console.log(grid);
+            }
+            function updategrid()
+            {
+                for(var i =0 ;i<4;i++)
+                {
+                    for(var j =0; j<4; j++)
+                        $("#c"+i+''+j).text(grid[i][j]).css(style[grid[i][j]]);
+                }
+            }
+            function moveright()
+            {
+    
+                let arr = new Array();
+                for(var i = 0; i < 4; i++)
+                {
+                    for(var j = 0;j < 4; j++)
+                    {
+                        if(grid[i][j] != 0)
+                        {
+                            if(grid[i][j] == arr[0])
+                                arr[0] = arr[0]*2;
+                            else
+                                arr.push(grid[i][j]);
+                            grid[i][j] = 0;
+                        }
+                    }   
+                    var len = arr.length;
+                    var cnt =3;
+                    while(len)
+                    {
+                        grid[i][cnt] = arr.pop();
+                        cnt--;
+                        len--;
+                    }
+                }
+                console.log(grid);
+                updategrid();
+            }
+            function moveleft()
+            {
+                let arr = new Array();
+                for(var i = 0; i < 4; i++)
+                {
+                    for(var j = 3;j >= 0; j--)
+                    {
+                        if(grid[i][j] != 0)
+                        {
+                            if(grid[i][j] == arr[0])
+                                arr[0] = arr[0]*2;
+                            else
+                                arr.push(grid[i][j]);
+                            grid[i][j] = 0;
+                        }
+                    }   
+                    var len = arr.length;
+                    var cnt =3;
+                    while(len)
+                    {
+                        grid[i][3-cnt] = arr.pop();
+                        cnt--;
+                        len--;
+                    }
+                }
+                console.log(grid);
+                updategrid();
+            }
+            function moveup()
+            {
+    
+                let arr = new Array();
+                for(var i = 0; i < 4; i++)
+                {
+                    for(var j = 3;j >= 0; j--)
+                    
+                    {
+                        if(grid[j][i] != 0)
+                        {
+                            if(grid[j][i] == arr[0])
+                                arr[0] = arr[0]*2;
+                            else
+                                arr.push(grid[j][i]);
+                            grid[j][i] = 0;
+                        }
+                    }   
+                    var len = arr.length;
+                    var cnt =3;
+                    while(len)
+                    {
+                        grid[3-cnt][i] = arr.pop();
+                        cnt--;
+                        len--;
+                    }
+                }
+                console.log(grid);
+                updategrid();
+            }
+            function movedown()
+            {
+                let arr = new Array();
+                for(var i = 0; i < 4; i++)
+                {
+                    for(var j = 0;j < 4; j++)
+                    {
+                        if(grid[j][i] != 0)
+                        {
+                            if(grid[j][i] == arr[0])
+                                arr[0] = arr[0]*2;
+                            else
+                                arr.push(grid[j][i]);
+                            grid[j][i] = 0;
+                        }
+                    }   
+                    var len = arr.length;
+                    var cnt =3;
+                    while(len)
+                    {
+                        grid[cnt][i] = arr.pop();
+                        cnt--;
+                        len--;
+                    }
+                }
+                console.log(grid);
+                updategrid();
+            }
+            function eventfunction()
+            {
+                document.onkeydown = function(event) {
+
+                    switch (event.keyCode) {
+                    case 37:
+                           // alert('Left key pressed');
+                            moveleft();
+                            randomcell();
+                        break;
+                    case 38:
+                            moveup();   
+                            randomcell();
+                        //    alert('Up key pressed');
+                            
+                        break;
+                    case 39:
+                        //    alert('Right key pressed');
+                            moveright();
+                            randomcell();
+                        break;
+                    case 40:
+                        //    alert('Down key pressed');
+                            movedown();
+                            randomcell();   
+                        break;
+                     }
+                }
+                
+
+            }
+            function startgame()
+            {
+                randomcell();
+                randomcell();
+                eventfunction();
+            }
+
+            startgame();
+        </script>
+    </body>
+</html>
